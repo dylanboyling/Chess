@@ -45,20 +45,25 @@ public class Board {
             return false;
         }
 
-        // Gets coordinates of selected piece and verifies the space is not null
+        // Gets coordinates of selected piece
         int x = cols.get(String.valueOf(userMove.charAt(0)));
         int y = 8 - Character.getNumericValue(userMove.charAt(1));
 
+        // Gets coordinates of the new location
+        int newX = cols.get(String.valueOf(userMove.charAt(2)));
+        int newY = 8 - Character.getNumericValue(userMove.charAt(3));
+
+        // verifies a piece is actually selected
         if (board[y][x] == null) {
             System.out.println("There is no piece at the location you selected. Please try again.");
             return false;
         } else if (board[y][x].getColor() != playerColor) {
             System.out.println("You have selected a piece that does not belong to you. Please try again.");
             return false;
+        } else if (board[y][x].getColor() == board[newY][newX].getColor()) {
+            System.out.println("You cannot capture your own piece. Please try again.");
+            return false;
         } else {
-            // Gets coordinates of the new location and attempts to move the piece there
-            int newX = cols.get(String.valueOf(userMove.charAt(2)));
-            int newY = 8 - Character.getNumericValue(userMove.charAt(3));
             // should only fail if Piece decides move is not valid, otherwise piece is moved
             if (!board[y][x].move(newX, newY)) {
                 System.out.println("Not a valid move. Please try again.");
@@ -126,19 +131,6 @@ public class Board {
         // 2D array to hold chess pieces
         board = new Piece[8][8];
 
-        // White pieces
-        board[7] = new Piece[] { new Rook(false, 0, 7), new Knight(false, 1, 7),
-                new Bishop(false, 2, 7), new King(false, 3, 7),
-                new Queen(false, 4, 7), new Bishop(false, 5, 7),
-                new Knight(false, 6, 7), new Rook(false, 7, 7) };
-        board[6] = new Piece[] { new Pawn(false, 0, 6), new Pawn(false, 1, 6),
-                new Pawn(false, 2, 6), new Pawn(false, 3, 6),
-                new Pawn(false, 4, 6), new Pawn(false, 5, 6),
-                new Pawn(false, 6, 6), new Pawn(false, 7, 6) };
-
-        // for (Piece piece : board[0]) {
-        // }
-
         // Black pieces
         board[1] = new Piece[] { new Pawn(true, 0, 1), new Pawn(true, 1, 1),
                 new Pawn(true, 2, 1), new Pawn(true, 3, 1),
@@ -148,6 +140,16 @@ public class Board {
                 new Bishop(true, 2, 0), new King(true, 3, 0),
                 new Queen(true, 4, 0), new Bishop(true, 5, 0),
                 new Knight(true, 6, 0), new Rook(true, 7, 0) };
+
+        // White pieces
+        board[7] = new Piece[] { new Rook(false, 0, 7), new Knight(false, 1, 7),
+                new Bishop(false, 2, 7), new King(false, 3, 7),
+                new Queen(false, 4, 7), new Bishop(false, 5, 7),
+                new Knight(false, 6, 7), new Rook(false, 7, 7) };
+        board[6] = new Piece[] { new Pawn(false, 0, 6), new Pawn(false, 1, 6),
+                new Pawn(false, 2, 6), new Pawn(false, 3, 6),
+                new Pawn(false, 4, 6), new Pawn(false, 5, 6),
+                new Pawn(false, 6, 6), new Pawn(false, 7, 6) };
 
         // System.out.println("Valid options are 1, 2, 3 or Q.");
     }

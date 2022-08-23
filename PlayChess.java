@@ -17,7 +17,7 @@ public class PlayChess {
 
         Board.newGame();
 
-        boolean playerColor = false;
+        boolean playerColor = false; // white
 
         System.out.printf("%nWelcome to my command line interpretation of chess!%n"
                 + "White chess pieces are indicated in lower case, black pieces in upper case.%n"

@@ -6,6 +6,7 @@ Currently only move processing and move functionality for pawn and rook pieces h
 
 
 ## Features in progress
+
 * Move functionality for king, queen, bishop, and knight
 * Alternate between players
 * Check, checkmate
@@ -15,6 +16,7 @@ En passant and castling are not implemented. I may add them in the future if tim
 
 
 ## How to run my chess game
+
 ```sh
  git clone https://github.com/dylanboyling/Chess
  cd Chess
