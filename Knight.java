@@ -24,8 +24,18 @@ public class Knight extends Piece {
             return "n";
     }
 
-    @Override 
-    public boolean move(int newX, int newY){
+    @Override
+    public boolean move(int newX, int newY) {
+
+        int xDir = Math.abs(newX - x);
+        int yDir = Math.abs(newY - y);
+
+        if (xDir == 1 && yDir == 2 || xDir == 2 && yDir == 1) {
+            this.x = newX;
+            this.y = newY;
+            return true;
+        }
+
         return false;
     }
 

@@ -30,11 +30,6 @@ public class Queen extends Piece {
         int xDir = newX - x;
         int yDir = y - newY;
 
-        // // makes sure it isnt being moved vertically or horizontally
-        // if (x == newX && y == newY || Math.abs(xDir) != Math.abs(yDir)) {
-        // return false;
-        // }
-
         // some flavor of right movement
         if (xDir > 0) {
             // top right diagonal
@@ -159,8 +154,6 @@ public class Queen extends Piece {
         return false;
     }
 
-    // Prints all of the valid moves (coordintes) that the rook may move to from
-    // (x, y)
     // @Override
     public String getLegalMoves() {
         return "Move functionality not implemented for this piece.";
