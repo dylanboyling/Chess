@@ -6,14 +6,12 @@ import java.util.Map;
  * output to console as well
  */
 
-// TODO note to self: changed row/column to x/y for readability (my sake) check
-// for errors later
 public class Board {
 
-    /** Stores black chess pieces */
-    private static ArrayList<Piece> black;
-    /** Stores white chess pieces */
-    private static ArrayList<Piece> white;
+    // /** Stores black chess pieces */
+    // private static ArrayList<Piece> black;
+    // /** Stores white chess pieces */
+    // private static ArrayList<Piece> white;
     /** 2D array represnting the chess board and its pieces */
     public static Piece[][] board;
 
@@ -39,7 +37,6 @@ public class Board {
         // Verifies move entered by user are valid coordinates
         userMove = userMove.replace(" ", "");
         String pattern = "[a-hA-H][1-8][a-hA-H][1-8]";
-
         if (!userMove.matches(pattern)) {
             System.out.println("Not a valid move. Please try again.");
             return false;
@@ -150,7 +147,5 @@ public class Board {
                 new Pawn(false, 2, 6), new Pawn(false, 3, 6),
                 new Pawn(false, 4, 6), new Pawn(false, 5, 6),
                 new Pawn(false, 6, 6), new Pawn(false, 7, 6) };
-
-        // System.out.println("Valid options are 1, 2, 3 or Q.");
     }
 }

@@ -24,15 +24,27 @@ public class King extends Piece {
             return "k";
     }
 
-    public boolean isChecked(){
-        // TODO finish checking for check on king 
+    public boolean isChecked() {
+        // TODO finish checking for check on king
         // https://stackoverflow.com/questions/31311926/implementing-check-in-a-chess-game
         return false;
     }
 
-    @Override 
-    public boolean move(int newX, int newY){
-        return false;
+    @Override
+    public boolean move(int newX, int newY) {
+        // figure out direction, up and right are positive numbers
+        int xDir = newX - x;
+        int yDir = y - newY;
+
+        // can only move 1 space in any direction
+        if (Math.abs(xDir) > 1|| Math.abs(yDir) > 1 || xDir == 0 && yDir == 0)
+            return false;
+
+        // TODO verify king isn't going into check when moved
+
+        this.x = newX;
+        this.y = newY;
+        return true;
     }
 
     // Prints all of the valid moves (coordintes) that the rook may move to from
