@@ -26,12 +26,18 @@ public class King extends Piece {
 
     public boolean isChecked() {
         // TODO finish checking for check on king
-        // https://stackoverflow.com/questions/31311926/implementing-check-in-a-chess-game
+        
+        for(int i = x; i < Board.getDimension(); i++){
+            for(int j = x; j < Board.getDimension(); j++){
+
+            }
+        }
+
         return false;
     }
 
     @Override
-    public boolean move(int newX, int newY) {
+    public boolean canMove(int newX, int newY) {
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
         int yDir = y - newY;
@@ -42,8 +48,6 @@ public class King extends Piece {
 
         // TODO verify king isn't going into check when moved
 
-        this.x = newX;
-        this.y = newY;
         return true;
     }
 

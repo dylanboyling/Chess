@@ -25,7 +25,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean move(int newX, int newY) {
+    public boolean canMove(int newX, int newY) {
         // makes sure it isnt being moved diagonally
         if (x != newX && y != newY) {
             return false;
@@ -42,8 +42,6 @@ public class Rook extends Piece {
                 if (i + 1 != newX && Board.getPiece(i + 1, y) != null) {
                     return false;
                 } else if (i + 1 == newX) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 }
             }
@@ -56,8 +54,6 @@ public class Rook extends Piece {
                 if (i - 1 != newX && Board.getPiece(i - 1, y) != null) {
                     return false;
                 } else if (i - 1 == newX) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 }
             }
@@ -70,8 +66,6 @@ public class Rook extends Piece {
                 if (i - 1 != newY && Board.getPiece(x, i - 1) != null) {
                     return false;
                 } else if (i - 1 == newY) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 }
             }
@@ -85,8 +79,6 @@ public class Rook extends Piece {
                 if (i + 1 != newY && Board.getPiece(x, i + 1) != null) {
                     return false;
                 } else if (i + 1 == newY) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 }
             }

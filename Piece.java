@@ -45,7 +45,17 @@ public abstract class Piece {
     // Letter is uppercase if piece is black, lowercase if piece is white
     public abstract String getSymbol();
 
-    public abstract boolean move(int newX, int newY);
+    public boolean movePiece(int newX, int newY){
+        if(canMove(newX,newY)){
+            this.x = newX;
+            this.y = newY;
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public abstract boolean canMove(int newX, int newY);
 
     // Given current position of (x, y), it will print the valid moves a piece
     // may move

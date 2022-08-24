@@ -25,7 +25,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public boolean move(int newX, int newY) {
+    public boolean canMove(int newX, int newY) {
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
         int yDir = y - newY;

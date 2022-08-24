@@ -25,7 +25,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public boolean move(int newX, int newY) {
+    public boolean canMove(int newX, int newY) {
 
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
@@ -44,8 +44,6 @@ public class Bishop extends Piece {
                     if (i + 1 != newX && j - 1 != newY && Board.getPiece(i + 1, j - 1) != null) {
                         return false;
                     } else if (i + 1 == newX && j - 1 == newY) {
-                        this.x = newX;
-                        this.y = newY;
                         return true;
                     }
                 }
@@ -60,8 +58,6 @@ public class Bishop extends Piece {
                     if (i - 1 != newX && j - 1 != newY && Board.getPiece(i - 1, j - 1) != null) {
                         return false;
                     } else if (i - 1 == newX && j - 1 == newY) {
-                        this.x = newX;
-                        this.y = newY;
                         return true;
                     }
                 }
@@ -76,8 +72,6 @@ public class Bishop extends Piece {
                     if (i + 1 != newX && j + 1 != newY && Board.getPiece(i + 1, j + 1) != null) {
                         return false;
                     } else if (i + 1 == newX && j + 1 == newY) {
-                        this.x = newX;
-                        this.y = newY;
                         return true;
                     }
                 }
@@ -92,8 +86,6 @@ public class Bishop extends Piece {
                     if (i - 1 != newX && j + 1 != newY && Board.getPiece(i - 1, j + 1) != null) {
                         return false;
                     } else if (i - 1 == newX && j + 1 == newY) {
-                        this.x = newX;
-                        this.y = newY;
                         return true;
                     }
                 }

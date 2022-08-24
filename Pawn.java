@@ -1,6 +1,9 @@
 // This class represents the Pawn piece in Chess
 public class Pawn extends Piece {
 
+    // TODO pawn promotion
+    private boolean hasPromoted = false;
+
     // Constructor using isBlack yor toggle, true if the piece is black. White
     // otherwise
     public Pawn(boolean isBlack, int x, int y) {
@@ -22,7 +25,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean move(int newX, int newY) {
+    public boolean canMove(int newX, int newY) {
         // TODO pawn promotion
 
         // Checks piece your as it can only move in one direction
@@ -34,8 +37,6 @@ public class Pawn extends Piece {
             // checks movement if still in home row, can move two squares
             if (newY - y == 2 && y == 1 && x == newX) {
                 if (Board.getPiece(x, y + 1) == null && Board.getPiece(x, y + 2) == null) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 } else {
                     return false;
@@ -44,8 +45,6 @@ public class Pawn extends Piece {
             // pawn is moving 1 square ahead in its row
             if (newY - y == 1 && x == newX) {
                 if (Board.getPiece(x, y + 1) == null) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 } else {
                     return false;
@@ -54,8 +53,6 @@ public class Pawn extends Piece {
             // pawn is capturing a piece diagonally
             if (newY - y == 1 && Math.abs(x - newX) == 1) {
                 if (Board.getPiece(newX, newY) != null) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 } else {
                     return false;
@@ -69,8 +66,6 @@ public class Pawn extends Piece {
             // checks movement if still in home row, can move two squares
             if (y - newY == 2 && y == 6 && x == newX) {
                 if (Board.getPiece(x, y - 1) == null && Board.getPiece(x, y - 2) == null) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 } else {
                     return false;
@@ -79,8 +74,6 @@ public class Pawn extends Piece {
             // pawn is moving 1 square ahead in its row
             if (y - newY == 1 && x == newX) {
                 if (Board.getPiece(x, y - 1) == null) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 } else {
                     return false;
@@ -89,8 +82,6 @@ public class Pawn extends Piece {
             // pawn is capturing a piece diagonally
             if (y - newY == 1 && Math.abs(x - newX) == 1) {
                 if (Board.getPiece(newX, newY) != null) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 } else {
                     return false;

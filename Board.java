@@ -62,7 +62,7 @@ public class Board {
             return false;
         } else {
             // should only fail if Piece decides move is not valid, otherwise piece is moved
-            if (!board[y][x].move(newX, newY)) {
+            if (!board[y][x].movePiece(newX, newY)) {
                 System.out.println("Not a valid move. Please try again.");
                 return false;
             } else {
@@ -147,5 +147,10 @@ public class Board {
                 new Pawn(false, 2, 6), new Pawn(false, 3, 6),
                 new Pawn(false, 4, 6), new Pawn(false, 5, 6),
                 new Pawn(false, 6, 6), new Pawn(false, 7, 6) };
+    }
+
+    /** Returns height/width of the board, assumes it is a square board */
+    public static int getDimension(){
+        return board.length;
     }
 }
