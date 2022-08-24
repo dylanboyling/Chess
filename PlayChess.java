@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /*
  * Author: Dylan Boyling  
  * Description: This program is adapted from my own minimally viable chess game that I coded for an 
@@ -17,7 +19,9 @@ public class PlayChess {
 
         Board.newGame();
 
-        boolean playerColor = false; // white
+        Random coinFlip = new Random(); // random player goes first
+        boolean playerTurn = coinFlip.nextBoolean(); // white for false, black for true
+        boolean playerMoved;
 
         System.out.printf("%nWelcome to my command line interpretation of chess!%n"
                 + "White chess pieces are indicated in lower case, black pieces in upper case.%n"
@@ -29,33 +33,32 @@ public class PlayChess {
         // Variables for menu selection
         final String LEGAL_MOVES = "?"; // displays all legal moves
         final String QUIT = "q"; // quits the program
+        String option = ""; // storing user input
 
-        // Variables for user input
-        String option = "";
-        Boolean isOptionValid = false;
+        System.out.println((playerTurn ? "Black has randomly been decided to go first"
+                : "White has randomly been decided to go first"));
 
         // Handles input of menu, will not exit unless Q is entered (case insensitive)
         do {
             Board.draw();
 
-            // User for a menu selection, only accepts 1, 2, 3 or Q. Will repeat until a
-            // valid option is entered.
+            System.out.println((playerTurn ? "It is black's turn" : "It is white's turn"));
+            playerMoved = false;
+            // Menu selection, only exits when player enters a valid move
             do {
                 option = UserInput.inputOption();
                 switch (option) {
                     case LEGAL_MOVES:
                         System.out.println(Board.legalMoves());
-                        isOptionValid = true;
                         break;
                     case QUIT:
-                        // do anything else here???
-                        isOptionValid = true;
+                        playerMoved = true; // exits game
                         break;
                     default:
-                        Board.movePiece(option, playerColor);
-                        isOptionValid = true;
+                        playerMoved = Board.movePiece(option, playerTurn);
                 }
-            } while (!isOptionValid);
+            } while (!playerMoved);
+            playerTurn = !playerTurn; // alternate players
         } while (!option.equalsIgnoreCase(QUIT));
 
         UserInput.closeInput();
