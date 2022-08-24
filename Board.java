@@ -60,7 +60,7 @@ public class Board {
         } else if (board[y][x].getColor() != playerColor) {
             System.out.println("You have selected a piece that does not belong to you. Please try again.");
             return false;
-        } else if (board[y][x].getColor() == board[newY][newX].getColor()) {
+        } else if (board[newY][newX] != null && board[y][x].getColor() == board[newY][newX].getColor()) {
             System.out.println("You cannot capture your own piece. Please try again.");
             return false;
         } else {

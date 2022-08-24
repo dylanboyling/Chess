@@ -67,7 +67,7 @@ public class Pawn extends Piece {
                 return false;
             }
             // checks movement if still in home row, can move two squares
-            if (y - newY == 2 && y == 1 && x == newX) {
+            if (y - newY == 2 && y == 6 && x == newX) {
                 if (Board.getPiece(x, y - 1) == null && Board.getPiece(x, y - 2) == null) {
                     this.x = newX;
                     this.y = newY;
