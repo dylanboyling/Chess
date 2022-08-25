@@ -8,16 +8,12 @@ import java.util.Map;
 
 public class Board {
 
-    // /** Stores black chess pieces */
-    // private static ArrayList<Piece> black;
-    // /** Stores white chess pieces */
-    // private static ArrayList<Piece> white;
+    /** Stores black chess pieces */
+    private static ArrayList<Piece> black;
+    /** Stores white chess pieces */
+    private static ArrayList<Piece> white;
     /** 2D array represnting the chess board and its pieces */
     public static Piece[][] board;
-
-    private static Map<String, Integer> cols = Map.of("a", 0, "b", 1,
-            "c", 2, "d", 3, "e", 4, "f", 5,
-            "g", 6, "h", 7);
 
     private Board() {
         /** no >:( */
@@ -37,6 +33,12 @@ public class Board {
         // Verifies move entered by user are valid coordinates
         userMove = userMove.replace(" ", "");
         String pattern = "[a-hA-H][1-8][a-hA-H][1-8]";
+
+        // Translating column input into integers
+        Map<String, Integer> cols = Map.of("a", 0, "b", 1,
+        "c", 2, "d", 3, "e", 4, "f", 5,
+        "g", 6, "h", 7);
+
         if (!userMove.matches(pattern)) {
             System.out.println("Not a valid move. Please try again.");
             return false;
@@ -62,10 +64,19 @@ public class Board {
             return false;
         } else {
             // should only fail if Piece decides move is not valid, otherwise piece is moved
-            if (!board[y][x].movePiece(newX, newY)) {
+            if (!board[y][x].canMove(newX, newY)) {
                 System.out.println("Not a valid move. Please try again.");
                 return false;
             } else {
+                // removes piece from player's pieces if captured
+                if (board[newY][newX] != null) {
+                    if (playerColor)
+                        white.remove(board[newY][newX]);
+                    else
+                        black.remove(board[newY][newX]);
+                }
+                // moves piece
+                board[y][x].movePiece(newX, newY);
                 board[newY][newX] = board[y][x];
                 board[y][x] = null;
                 // TODO should players keep track of what pieces they have?
@@ -89,7 +100,7 @@ public class Board {
         System.out.println();
 
         // Code used for printing the grid was adapted from assignment Lab1, Lab2 at
-        // Algonquin Ylege in CST8132
+        // Algonquin College in CST8132
         // Author: Dylan Boyling
         // Retrieved: June 8th, 2022
 
@@ -127,6 +138,8 @@ public class Board {
 
         // 2D array to hold chess pieces
         board = new Piece[8][8];
+        black = new ArrayList<>(Board.getDimension());
+        white = new ArrayList<>(Board.getDimension());
 
         // Black pieces
         board[1] = new Piece[] { new Pawn(true, 0, 1), new Pawn(true, 1, 1),
@@ -137,6 +150,12 @@ public class Board {
                 new Bishop(true, 2, 0), new King(true, 3, 0),
                 new Queen(true, 4, 0), new Bishop(true, 5, 0),
                 new Knight(true, 6, 0), new Rook(true, 7, 0) };
+        for (Piece p : board[1]) {
+            black.add(p);
+        }
+        for (Piece p : board[0]) {
+            black.add(p);
+        }
 
         // White pieces
         board[7] = new Piece[] { new Rook(false, 0, 7), new Knight(false, 1, 7),
@@ -147,10 +166,26 @@ public class Board {
                 new Pawn(false, 2, 6), new Pawn(false, 3, 6),
                 new Pawn(false, 4, 6), new Pawn(false, 5, 6),
                 new Pawn(false, 6, 6), new Pawn(false, 7, 6) };
+        for (Piece p : board[7]) {
+            white.add(p);
+        }
+        for (Piece p : board[6]) {
+            white.add(p);
+        }
     }
 
     /** Returns height/width of the board, assumes it is a square board */
-    public static int getDimension(){
+    public static int getDimension() {
         return board.length;
+    }
+
+    /** Returns an instance of the list of white pieces */
+    public static ArrayList<Piece> getWhitePieces() {
+        return white;
+    }
+
+    /** Returns an instance of the list of white pieces */
+    public static ArrayList<Piece> getBlackPieces() {
+        return black;
     }
 }

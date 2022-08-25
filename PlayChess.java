@@ -41,7 +41,6 @@ public class PlayChess {
         // Handles input of menu, will not exit unless Q is entered (case insensitive)
         do {
             Board.draw();
-
             System.out.println((playerTurn ? "It is black's turn" : "It is white's turn"));
             playerMoved = false;
             // Menu selection, only exits when player enters a valid move

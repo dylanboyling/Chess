@@ -2,7 +2,7 @@
 public class Pawn extends Piece {
 
     // TODO pawn promotion
-    private boolean hasPromoted = false;
+    //private boolean hasPromoted = false;
 
     // Constructor using isBlack yor toggle, true if the piece is black. White
     // otherwise

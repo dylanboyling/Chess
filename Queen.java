@@ -40,8 +40,6 @@ public class Queen extends Piece {
                         if (i + 1 != newX && j - 1 != newY && Board.getPiece(i + 1, j - 1) != null) {
                             return false;
                         } else if (i + 1 == newX && j - 1 == newY) {
-                            this.x = newX;
-                            this.y = newY;
                             return true;
                         }
                     }
@@ -55,8 +53,6 @@ public class Queen extends Piece {
                         if (i + 1 != newX && j + 1 != newY && Board.getPiece(i + 1, j + 1) != null) {
                             return false;
                         } else if (i + 1 == newX && j + 1 == newY) {
-                            this.x = newX;
-                            this.y = newY;
                             return true;
                         }
                     }
@@ -69,8 +65,6 @@ public class Queen extends Piece {
                     if (i + 1 != newX && Board.getPiece(i + 1, y) != null) {
                         return false;
                     } else if (i + 1 == newX) {
-                        this.x = newX;
-                        this.y = newY;
                         return true;
                     }
                 }
@@ -85,8 +79,6 @@ public class Queen extends Piece {
                         if (i - 1 != newX && j - 1 != newY && Board.getPiece(i - 1, j - 1) != null) {
                             return false;
                         } else if (i - 1 == newX && j - 1 == newY) {
-                            this.x = newX;
-                            this.y = newY;
                             return true;
                         }
                     }
@@ -100,8 +92,6 @@ public class Queen extends Piece {
                         if (i - 1 != newX && j + 1 != newY && Board.getPiece(i - 1, j + 1) != null) {
                             return false;
                         } else if (i - 1 == newX && j + 1 == newY) {
-                            this.x = newX;
-                            this.y = newY;
                             return true;
                         }
                     }
@@ -114,8 +104,6 @@ public class Queen extends Piece {
                     if (i - 1 != newX && Board.getPiece(i - 1, y) != null) {
                         return false;
                     } else if (i - 1 == newX) {
-                        this.x = newX;
-                        this.y = newY;
                         return true;
                     }
                 }
@@ -129,8 +117,6 @@ public class Queen extends Piece {
                 if (i - 1 != newY && Board.getPiece(x, i - 1) != null) {
                     return false;
                 } else if (i - 1 == newY) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 }
             }
@@ -143,8 +129,6 @@ public class Queen extends Piece {
                 if (i + 1 != newY && Board.getPiece(x, i + 1) != null) {
                     return false;
                 } else if (i + 1 == newY) {
-                    this.x = newX;
-                    this.y = newY;
                     return true;
                 }
             }

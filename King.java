@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 // This class represents the King piece in Chess
 public class King extends Piece {
 
@@ -24,12 +26,57 @@ public class King extends Piece {
             return "k";
     }
 
-    public boolean isChecked() {
-        // TODO finish checking for check on king
-        
-        for(int i = x; i < Board.getDimension(); i++){
-            for(int j = x; j < Board.getDimension(); j++){
+    public boolean isCheckmate(){
 
+        
+        return false;
+    }
+
+    /**
+     * Returns true if King is in check at its current location, false if it is not.
+     * 
+     * @returns check status, true if king is in check and false if not
+     */
+    public boolean isChecked() {
+
+        if (isBlack) {
+            ArrayList<Piece> white = Board.getWhitePieces();
+            for (Piece p : white) {
+                if (p.canMove(x, y))
+                    return true;
+            }
+        } else {
+            ArrayList<Piece> black = Board.getBlackPieces();
+            for (Piece p : black) {
+                if (p.canMove(x, y))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if King will be in check if it moves to (testX, testY), false if
+     * not
+     * 
+     * @param testX X coord that the king might move to
+     * @param testY Y coord that the king might move to
+     * @returns check status, true if king is in check and false if not
+     */
+    public boolean isChecked(int testX, int testY) {
+
+        if (isBlack) {
+            ArrayList<Piece> white = Board.getWhitePieces();
+            for (Piece p : white) {
+                if (p.canMove(testX, testY))
+                    return true;
+            }
+        } else {
+            ArrayList<Piece> black = Board.getBlackPieces();
+            for (Piece p : black) {
+                if (p.canMove(testX, testY))
+                    return true;
             }
         }
 
@@ -43,10 +90,12 @@ public class King extends Piece {
         int yDir = y - newY;
 
         // can only move 1 space in any direction
-        if (Math.abs(xDir) > 1|| Math.abs(yDir) > 1 || xDir == 0 && yDir == 0)
+        if (Math.abs(xDir) > 1 || Math.abs(yDir) > 1 || xDir == 0 && yDir == 0)
             return false;
 
-        // TODO verify king isn't going into check when moved
+        // verifies king won't be in check at new location
+        if (this.isChecked(newX, newY))
+            return false;
 
         return true;
     }
