@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 // This class represents the King piece in Chess
 public class King extends Piece {
 
@@ -26,65 +24,16 @@ public class King extends Piece {
             return "k";
     }
 
-    public boolean isCheckmate(){
-
-        
-        return false;
-    }
-
-    /**
-     * Returns true if King is in check at its current location, false if it is not.
-     * 
-     * @returns check status, true if king is in check and false if not
-     */
-    public boolean isChecked() {
-
-        if (isBlack) {
-            ArrayList<Piece> white = Board.getWhitePieces();
-            for (Piece p : white) {
-                if (p.canMove(x, y))
-                    return true;
-            }
-        } else {
-            ArrayList<Piece> black = Board.getBlackPieces();
-            for (Piece p : black) {
-                if (p.canMove(x, y))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if King will be in check if it moves to (testX, testY), false if
-     * not
-     * 
-     * @param testX X coord that the king might move to
-     * @param testY Y coord that the king might move to
-     * @returns check status, true if king is in check and false if not
-     */
-    public boolean isChecked(int testX, int testY) {
-
-        if (isBlack) {
-            ArrayList<Piece> white = Board.getWhitePieces();
-            for (Piece p : white) {
-                if (p.canMove(testX, testY))
-                    return true;
-            }
-        } else {
-            ArrayList<Piece> black = Board.getBlackPieces();
-            for (Piece p : black) {
-                if (p.canMove(testX, testY))
-                    return true;
-            }
-        }
+    public boolean isCheckmate() {
 
         return false;
     }
 
     @Override
     public boolean canMove(int newX, int newY) {
+        if (!validCoordinates(newX, newY))
+            return false;
+
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
         int yDir = y - newY;
@@ -93,17 +42,9 @@ public class King extends Piece {
         if (Math.abs(xDir) > 1 || Math.abs(yDir) > 1 || xDir == 0 && yDir == 0)
             return false;
 
-        // verifies king won't be in check at new location
-        if (this.isChecked(newX, newY))
-            return false;
-
         return true;
     }
 
-    // Prints all of the valid moves (coordintes) that the rook may move to from
-    // (x, y)
     @Override
-    public String getLegalMoves() {
-        return "Move functionality not implemented for this piece.";
-    }
+    public void updateLegalMoves() {}
 }

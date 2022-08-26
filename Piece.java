@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Map;
+
 /*
  * Author: Dylan Boyling  
  * Description: This program is adapted from my own minimally viable chess game that I coded for an 
@@ -18,12 +21,19 @@ public abstract class Piece {
     protected boolean isBlack;
     protected int x;
     protected int y;
+    // Translating integers to column input for outputting movies
+    protected static Map<Integer, String> cols = Map.of(0, "a", 1, "b",
+            2, "c", 3, "d", 4, "e", 5, "f",
+            6, "g", 7, "h");
+
+    protected ArrayList<Move> legalMoves;
 
     // Constructor using your toggle
     public Piece(boolean isBlack, int x, int y) {
         this.isBlack = isBlack;
         this.x = x;
         this.y = y;
+        legalMoves = new ArrayList<Move>();
     }
 
     public int getX() {
@@ -31,7 +41,7 @@ public abstract class Piece {
     }
 
     public int getY() {
-        return x;
+        return y;
     }
 
     public boolean getColor() {
@@ -45,23 +55,70 @@ public abstract class Piece {
     // Letter is uppercase if piece is black, lowercase if piece is white
     public abstract String getSymbol();
 
-    public boolean movePiece(int newX, int newY){
-        if(canMove(newX,newY)){
+    public boolean movePiece(int newX, int newY) {
+        if (validCoordinates(newX, newY)) {
             this.x = newX;
             this.y = newY;
             return true;
-        }else{
-            return false;
         }
+        return false;
+    }
+
+    /**
+     * Checks if coordinates are within valid range and that player is not capturing
+     * their own piece
+     */
+    public boolean validCoordinates(int newX, int newY) {
+        // out of bounds check
+        if (x < 0 || y < 0 || x > 7 || y > 7)
+            return false;
+
+        // cant capture your own piece
+        Piece other = Board.getPiece(newX, newY);
+        if (other != null && other.getColor() == isBlack)
+            return false;
+
+        return true;
     }
 
     public abstract boolean canMove(int newX, int newY);
 
-    // Given current position of (x, y), it will print the valid moves a piece
-    // may move
-    public abstract String getLegalMoves();
+    /**
+     * Returns a string of legal moves for this piece in the form [piece
+     * symbol][destination coordinates]
+     * e.g. Ra2 for rook can move to a2
+     * 
+     * @return String representation of all legal moves
+     */
+    public String getLegalMoves() {
+        String legalMovesString = "";
+        for (Move m : legalMoves) {
+            legalMovesString += getSymbol().toUpperCase() + m + " ";
+        }
+        return legalMovesString;
+    }
 
-    public boolean equals(Piece otherPiece) {
-        return this.x == otherPiece.getX() && this.y == otherPiece.getY();
+    public abstract void updateLegalMoves();
+
+    public boolean hasLegalMoves() {
+        if (legalMoves.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isMoveLegal(Move move) {
+        return legalMoves.contains(move);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (o == null || this.getClass() != o.getClass())
+            return false;
+        Piece otherPiece = (Piece) o;
+        return (this.x == otherPiece.getX()) && (this.y == otherPiece.getY());
     }
 }

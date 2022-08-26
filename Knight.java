@@ -26,6 +26,8 @@ public class Knight extends Piece {
 
     @Override
     public boolean canMove(int newX, int newY) {
+        if (!validCoordinates(newX, newY))
+            return false;
 
         int xDir = Math.abs(newX - x);
         int yDir = Math.abs(newY - y);
@@ -37,10 +39,6 @@ public class Knight extends Piece {
         return false;
     }
 
-    // Prints all of the valid moves (coordintes) that the rook may move to from
-    // (x, y)
     @Override
-    public String getLegalMoves() {
-        return "Move functionality not implemented for this piece.";
-    }
+    public void updateLegalMoves() {}
 }

@@ -26,68 +26,72 @@ public class Bishop extends Piece {
 
     @Override
     public boolean canMove(int newX, int newY) {
+        // 1) are coordinates in range
+        if (!validCoordinates(newX, newY))
+            return false;
 
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
         int yDir = y - newY;
 
-        // makes sure it isnt being moved vertically or horizontally
-        if (x == newX || y == newY || Math.abs(xDir) != Math.abs(yDir)) {
+        // 2) makes sure it isnt being moved vertically or horizontally
+        if (x == newX || y == newY || Math.abs(xDir) != Math.abs(yDir))
             return false;
-        }
+
+        // 3) does the move put its king into check? if so cant move period
+        if (!Board.testMove(isBlack, x, y, newX, newY))
+            return false;
 
         // top right diagonal
         if (xDir > 0 && yDir > 0) {
-            for (int i = x; i < newX; i++) {
-                for (int j = y; j > newY; j--) {
-                    // checks travel path, else it is the square we are moving to
-                    if (i + 1 != newX && j - 1 != newY && Board.getPiece(i + 1, j - 1) != null) {
-                        return false;
-                    } else if (i + 1 == newX && j - 1 == newY) {
-                        return true;
-                    }
+            int i = x;
+            int j = y;
+            while (++i <= newX && --j >= newY) {
+                // checks travel path, else it is the square we are moving to
+                if (i != newX && j != newY && Board.getPiece(i, j) != null) {
+                    return false;
+                } else if (i == newX && j == newY) {
+                    return true;
                 }
             }
         }
-
         // top left diagonal
         if (xDir < 0 && yDir > 0) {
-            for (int i = x; i > newX; i--) {
-                for (int j = y; j > newY; j--) {
-                    // checks travel path, else it is the square we are moving to
-                    if (i - 1 != newX && j - 1 != newY && Board.getPiece(i - 1, j - 1) != null) {
-                        return false;
-                    } else if (i - 1 == newX && j - 1 == newY) {
-                        return true;
-                    }
+            int i = x;
+            int j = y;
+            while (--i >= newX && --j >= newY) {
+                // checks travel path, else it is the square we are moving to
+                if (i != newX && j != newY && Board.getPiece(i, j) != null) {
+                    return false;
+                } else if (i == newX && j == newY) {
+                    return true;
                 }
             }
         }
-
         // bottom right diagonal
         if (xDir > 0 && yDir < 0) {
-            for (int i = x; i < newX; i++) {
-                for (int j = y; j < newY; j++) {
-                    // checks travel path, else it is the square we are moving to
-                    if (i + 1 != newX && j + 1 != newY && Board.getPiece(i + 1, j + 1) != null) {
-                        return false;
-                    } else if (i + 1 == newX && j + 1 == newY) {
-                        return true;
-                    }
+            int i = x;
+            int j = y;
+            while (++i <= newX && ++j <= newY) {
+                // checks travel path, else it is the square we are moving to
+                if (i != newX && j != newY && Board.getPiece(i, j) != null) {
+                    return false;
+                } else if (i == newX && j == newY) {
+                    return true;
                 }
             }
         }
 
         // bottom left diagonal
         if (xDir < 0 && yDir < 0) {
-            for (int i = x; i > newX; i--) {
-                for (int j = y; j < newY; j++) {
-                    // checks travel path, else it is the square we are moving to
-                    if (i - 1 != newX && j + 1 != newY && Board.getPiece(i - 1, j + 1) != null) {
-                        return false;
-                    } else if (i - 1 == newX && j + 1 == newY) {
-                        return true;
-                    }
+            int i = x;
+            int j = y;
+            while (--i >= newX && ++j <= newY) {
+                // checks travel path, else it is the square we are moving to
+                if (i != newX && j != newY && Board.getPiece(i, j) != null) {
+                    return false;
+                } else if (i == newX && j == newY) {
+                    return true;
                 }
             }
         }
@@ -96,10 +100,62 @@ public class Bishop extends Piece {
         return false;
     }
 
-    // Prints all of the valid moves (coordintes) that the rook may move to from
-    // (x, y)
     @Override
-    public String getLegalMoves() {
-        return "Move functionality not implemented for this piece.";
+    public void updateLegalMoves() {
+        // System.out.println("Bishop UpdateLegalMoves method was called for the piece
+        // at " + x+ " " + y);
+        legalMoves.clear();
+
+        // top right
+        int testX = x + 1;
+        int testY = y - 1;
+
+        while (testX <= 7 || testY >= 0) {
+            if (canMove(testX, testY))
+                legalMoves.add(new Move(testX, testY));
+            else
+                break;
+            testX++;
+            testY--;
+        }
+
+        // top left
+        testX = x - 1;
+        testY = y - 1;
+
+        while (testX >= 0 || testY >= 0) {
+            if (canMove(testX, testY))
+                legalMoves.add(new Move(testX, testY));
+            else
+                break;
+            testX--;
+            testY--;
+        }
+
+        // bottom right
+        testX = x + 1;
+        testY = y + 1;
+
+        while (testX <= 7 || testY <= 7) {
+            if (canMove(testX, testY))
+                legalMoves.add(new Move(testX, testY));
+            else
+                break;
+            testX++;
+            testY++;
+        }
+
+        // bottom left
+        testX = x - 1;
+        testY = y + 1;
+
+        while (testX >= 0 || testY <= 7) {
+            if (canMove(testX, testY))
+                legalMoves.add(new Move(testX, testY));
+            else
+                break;
+            testX--;
+            testY++;
+        }
     }
 }

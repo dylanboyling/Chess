@@ -2,7 +2,7 @@
 public class Pawn extends Piece {
 
     // TODO pawn promotion
-    //private boolean hasPromoted = false;
+    // private boolean hasPromoted = false;
 
     // Constructor using isBlack yor toggle, true if the piece is black. White
     // otherwise
@@ -26,7 +26,9 @@ public class Pawn extends Piece {
 
     @Override
     public boolean canMove(int newX, int newY) {
-        // TODO pawn promotion
+        // 1) are coordinates in range
+        if (!validCoordinates(newX, newY))
+            return false;
 
         // Checks piece your as it can only move in one direction
         if (isBlack) {
@@ -52,7 +54,7 @@ public class Pawn extends Piece {
             }
             // pawn is capturing a piece diagonally
             if (newY - y == 1 && Math.abs(x - newX) == 1) {
-                if (Board.getPiece(newX, newY) != null) {
+                if (validCoordinates(newX, newY) && Board.getPiece(newX, newY) != null) {
                     return true;
                 } else {
                     return false;
@@ -81,7 +83,7 @@ public class Pawn extends Piece {
             }
             // pawn is capturing a piece diagonally
             if (y - newY == 1 && Math.abs(x - newX) == 1) {
-                if (Board.getPiece(newX, newY) != null) {
+                if (validCoordinates(newX, newY) && Board.getPiece(newX, newY) != null) {
                     return true;
                 } else {
                     return false;
@@ -89,35 +91,41 @@ public class Pawn extends Piece {
             }
         }
 
+        // 2) does the move put its king into check? if so cant move period
+        if (!Board.testMove(isBlack, x, y, newX, newY))
+            return false;
+
         return false;
     }
 
-    // Prints all of the valid moves (coordintes) that the rook may move to from
-    // (x, y)
     @Override
-    public String getLegalMoves() {
-
-        System.out.println("Valid moves are:");
-
-        // Checks piece your as it can only move in one direction
+    public void updateLegalMoves() {
+        legalMoves.clear();
         if (isBlack) {
-            // Checks if piece is in home x or not
-            if (x == 7)
-                System.out.printf(" %d,%d %d,%d", x - 1, y, x - 2, y);
-            else if (x > 1)
-                System.out.printf(" %d,%d", x - 1, y);
-            else
-                System.out.println("This piece is at the end of the board and may not move.");
-        } else {
-            // Checks if piece is in home x or nota
-            if (x == 2)
-                System.out.printf(" %d,%d %d,%d", x + 1, y, x + 2, y);
-            else if (x < 8)
-                System.out.printf(" %d,%d", x + 1, y);
-            else
-                System.out.println("This piece is at the end of the board and may not move.");
-        }
-        return "todo";
-    }
+            // vertical moves
+            if (canMove(x, y + 1))
+                legalMoves.add(new Move(x, y + 1));
+            if (canMove(x, y + 2))
+                legalMoves.add(new Move(x, y + 2));
 
+            // diagonal captures
+            if (canMove(x + 1, y + 1))
+                legalMoves.add(new Move(x + 1, y + 1));
+            if (canMove(x - 1, y + 1))
+                legalMoves.add(new Move(x - 1, y + 1));
+        } else {
+            // vertical moves
+            if (canMove(x, y - 1))
+                legalMoves.add(new Move(x, y - 1));
+            if (canMove(x, y - 2))
+                legalMoves.add(new Move(x, y - 2));
+
+            // diagonal captures
+            if (canMove(x + 1, y - 1))
+                legalMoves.add(new Move(x + 1, y - 1));
+            if (canMove(x - 1, y - 1))
+                legalMoves.add(new Move(x - 1, y - 1));
+        }
+
+    }
 }

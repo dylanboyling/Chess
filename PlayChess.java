@@ -18,9 +18,12 @@ public class PlayChess {
     public static void main(String[] args) {
 
         Board.newGame();
+        Board.updateAllLegalMoves();
+
+        // TODO player score
 
         Random coinFlip = new Random(); // random player goes first
-        boolean playerTurn = coinFlip.nextBoolean(); // white for false, black for true
+        boolean playerTurn = false;// coinFlip.nextBoolean(); // white for false, black for true
         boolean playerMoved;
 
         System.out.printf("%nWelcome to my command line interpretation of chess!%n"
@@ -48,18 +51,18 @@ public class PlayChess {
                 option = UserInput.inputOption();
                 switch (option) {
                     case LEGAL_MOVES:
-                        System.out.println(Board.legalMoves());
+                        System.out.println(Board.getLegalMoves(playerTurn));
                         break;
                     case QUIT:
                         playerMoved = true; // exits game
                         break;
                     default:
-                        playerMoved = Board.movePiece(option, playerTurn);
+                        playerMoved = Board.processMove(option, playerTurn);
                 }
             } while (!playerMoved);
-            playerTurn = !playerTurn; // alternate players
+             //playerTurn = !playerTurn; // alternate players
         } while (!option.equalsIgnoreCase(QUIT));
-
+        // TODO win condition + prompt user to play again
         UserInput.closeInput();
         System.out.println("Program ending...");
         System.out.println("Program by Dylan Boyling");

@@ -26,10 +26,17 @@ public class Rook extends Piece {
 
     @Override
     public boolean canMove(int newX, int newY) {
-        // makes sure it isnt being moved diagonally
-        if (x != newX && y != newY) {
+        // 1) are coordinates in range
+        if (!validCoordinates(newX, newY))
             return false;
-        }
+
+        // 2) makes sure it isnt being moved diagonally
+        if (x != newX && y != newY)
+            return false;
+
+        // 3) does the move put its king into check? if so cant move period
+        if (!Board.testMove(isBlack, x, y, newX, newY))
+            return false;
 
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
@@ -88,27 +95,51 @@ public class Rook extends Piece {
         return false;
     }
 
-    // Prints all of the valid moves (coordintes) that the rook may move to from
-    // (x, y)
     @Override
-    public String getLegalMoves() {
+    public void updateLegalMoves() {
 
-        String validMoves = "";
-        System.out.println("Valid moves are: \n");
+        legalMoves.clear();
 
-        // Checking moves above and below the rook
-        for (int i = 1; i <= 8; i++) {
-            if (i != x)
-                System.out.printf(" %d,%d ", i, y);
-        }
-        System.out.println("and");
-
-        // Checking moves right and left of the rook
-        for (int i = 1; i <= 8; i++) {
-            if (i != y)
-                System.out.printf(" %d,%d ", x, i);
+        int testX = x;
+        int testY = y;
+        // checking moves above
+        while (--testY >= 0) {
+            if (canMove(x, testY))
+                legalMoves.add(new Move(x, testY));
+            else
+                break;
         }
 
-        return validMoves;
+        testX = x;
+        testY = y;
+        // checking moves below
+        while (++testY <= 7) {
+            if (canMove(x, testY))
+                legalMoves.add(new Move(x, testY));
+            else
+                break;
+        }
+
+        testX = x;
+        testY = y;
+        // Checking moves right
+        while (++testX <= 7) {
+            if (canMove(testX, y))
+                legalMoves.add(new Move(testX, y));
+            else
+                break;
+        }
+
+        testX = x - 1;
+        testY = y;
+        // Checking moves left
+        while (testX >= 0) {
+            if (canMove(testX, y))
+                legalMoves.add(new Move(testX, y));
+            else
+                break;
+            testX--;
+        }
     }
+
 }

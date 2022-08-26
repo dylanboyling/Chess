@@ -26,90 +26,42 @@ public class Queen extends Piece {
 
     @Override
     public boolean canMove(int newX, int newY) {
+        // 1) are coordinates in range
+        if (!validCoordinates(newX, newY))
+            return false;
+
+        // 3) does the move put its king into check? if so cant move period
+        if (!Board.testMove(isBlack, x, y, newX, newY))
+            return false;
+
         // figure out direction, up and right are positive numbers
         int xDir = newX - x;
         int yDir = y - newY;
 
-        // some flavor of right movement
+        // right
         if (xDir > 0) {
-            // top right diagonal
-            if (yDir > 0) {
-                for (int i = x; i < newX; i++) {
-                    for (int j = y; j > newY; j--) {
-                        // checks travel path, else it is the square we are moving to
-                        if (i + 1 != newX && j - 1 != newY && Board.getPiece(i + 1, j - 1) != null) {
-                            return false;
-                        } else if (i + 1 == newX && j - 1 == newY) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            // bottom right diagonal
-            else if (yDir < 0) {
-                for (int i = x; i < newX; i++) {
-                    for (int j = y; j < newY; j++) {
-                        // checks travel path, else it is the square we are moving to
-                        if (i + 1 != newX && j + 1 != newY && Board.getPiece(i + 1, j + 1) != null) {
-                            return false;
-                        } else if (i + 1 == newX && j + 1 == newY) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            // right
-            else {
-                for (int i = x; i < newX; i++) {
-                    // checks travel path, else it is the square we are moving to
-                    if (i + 1 != newX && Board.getPiece(i + 1, y) != null) {
-                        return false;
-                    } else if (i + 1 == newX) {
-                        return true;
-                    }
+            for (int i = x; i < newX; i++) {
+                // checks travel path, else it is the square we are moving to
+                if (i + 1 != newX && Board.getPiece(i + 1, y) != null) {
+                    return false;
+                } else if (i + 1 == newX) {
+                    return true;
                 }
             }
         }
+
+        // left
         if (xDir < 0) {
-            // top left diagonal
-            if (yDir > 0) {
-                for (int i = x; i > newX; i--) {
-                    for (int j = y; j > newY; j--) {
-                        // checks travel path, else it is the square we are moving to
-                        if (i - 1 != newX && j - 1 != newY && Board.getPiece(i - 1, j - 1) != null) {
-                            return false;
-                        } else if (i - 1 == newX && j - 1 == newY) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            // bottom left diagonal
-            else if (yDir < 0) {
-                for (int i = x; i > newX; i--) {
-                    for (int j = y; j < newY; j++) {
-                        // checks travel path, else it is the square we are moving to
-                        if (i - 1 != newX && j + 1 != newY && Board.getPiece(i - 1, j + 1) != null) {
-                            return false;
-                        } else if (i - 1 == newX && j + 1 == newY) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            // left
-            else {
-                for (int i = x; i > newX; i--) {
-                    // checks travel path, else it is the square we are moving to
-                    if (i - 1 != newX && Board.getPiece(i - 1, y) != null) {
-                        return false;
-                    } else if (i - 1 == newX) {
-                        return true;
-                    }
+            for (int i = x; i > newX; i--) {
+                // checks travel path, else it is the square we are moving to
+                if (i - 1 != newX && Board.getPiece(i - 1, y) != null) {
+                    return false;
+                } else if (i - 1 == newX) {
+                    return true;
                 }
             }
         }
-        
+
         // up
         if (yDir > 0) {
             for (int i = y; i > newY; i--) {
@@ -122,6 +74,7 @@ public class Queen extends Piece {
             }
 
         }
+
         // down
         if (yDir < 0) {
             for (int i = y; i < newY; i++) {
@@ -138,8 +91,50 @@ public class Queen extends Piece {
         return false;
     }
 
-    // @Override
-    public String getLegalMoves() {
-        return "Move functionality not implemented for this piece.";
+    @Override
+    public void updateLegalMoves() {
+
+        legalMoves.clear();
+
+        int testX = x;
+        int testY = y;
+        // checking moves above
+        while (--testY >= 0) {
+            if (canMove(x, testY))
+                legalMoves.add(new Move(x, testY));
+            else
+                break;
+        }
+
+        testX = x;
+        testY = y;
+        // checking moves below
+        while (++testY <= 7) {
+            if (canMove(x, testY))
+                legalMoves.add(new Move(x, testY));
+            else
+                break;
+        }
+
+        testX = x;
+        testY = y;
+        // Checking moves right
+        while (++testX <= 7) {
+            if (canMove(testX, y))
+                legalMoves.add(new Move(testX, y));
+            else
+                break;
+        }
+
+        testX = x - 1;
+        testY = y;
+        // Checking moves left
+        while (testX >= 0) {
+            if (canMove(testX, y))
+                legalMoves.add(new Move(testX, y));
+            else
+                break;
+            testX--;
+        }
     }
 }

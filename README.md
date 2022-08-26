@@ -7,7 +7,7 @@ Currently only move processing and move functionality for pawn and rook pieces h
 
 ## Features in progress
 
-* Check, checkmate
+* Checkmate
 * Pawn promotion
 * Stalemate?
 
