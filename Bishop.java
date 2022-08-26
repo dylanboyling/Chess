@@ -102,8 +102,6 @@ public class Bishop extends Piece {
 
     @Override
     public void updateLegalMoves() {
-        // System.out.println("Bishop UpdateLegalMoves method was called for the piece
-        // at " + x+ " " + y);
         legalMoves.clear();
 
         // top right

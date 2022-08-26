@@ -43,23 +43,21 @@ public class Board {
 
     /** */
     public static Piece getKing(boolean isBlack) {
-        King king = null; // is this bad? not sure. there should always be a king alive if game isnt over
-
         if (isBlack) {
             for (Piece p : black) {
-                if (p instanceof King) {
+                if (p.getSymbol().toLowerCase().equals("k")) {
                     return p;
                 }
             }
         } else {
             for (Piece p : white) {
-                if (p instanceof King) {
+                if (p.getSymbol().toLowerCase().equals("k")) {
                     return p;
                 }
             }
         }
 
-        return king;
+        return null;
     }
 
     /** Returns height/width of the board, assumes it is a square board */
@@ -100,21 +98,19 @@ public class Board {
     public static boolean isCheck(boolean playerColor) {
         King king = (King) getKing(playerColor);
 
+        // if any piece can move to the opposite team's king, they are in check
         if (playerColor) {
             ArrayList<Piece> white = Board.getPieces(!playerColor);
             for (Piece p : white) {
-                if (p.canMove(king.getX(), king.getY()))
+                if (p.isMoveLegal(new Move(king.getX(), king.getY())))
                     return true;
 
             }
         } else {
             ArrayList<Piece> black = Board.getPieces(!playerColor);
             for (Piece p : black) {
-                if (king == null)
-                    System.out.println("KING IS NULL!!!!!");
-                if (p.canMove(king.getX(), king.getY()))
+                if (p.isMoveLegal(new Move(king.getX(), king.getY())))
                     return true;
-
             }
         }
 
@@ -123,49 +119,52 @@ public class Board {
     }
 
     public static boolean testMove(boolean playerColor, int x, int y, int newX, int newY) {
-        // if (board[newY][newX] != null && board[newY][newX].getColor() == playerColor)
-        // return false;
-        // removes piece from player's pieces if captured
+        // coordinates in range
         if (newX < 0 || newY < 0 || newX > 7 || newY > 7)
             return false;
 
-        Piece tmp = board[newY][newX];
+        Piece otherPiece = board[newY][newX];
 
-        
+        // cant capture your own piece
+        if (otherPiece != null && otherPiece.getColor() == playerColor)
+            return false;
 
-        if(tmp == null)
-            System.out.println("henlo");
+        // remove captured piece
+        if (playerColor)
+            white.remove(otherPiece);
+        else
+            black.remove(otherPiece);
 
-        if (tmp != null) {
-            if (playerColor)
-                white.remove(tmp);
-            else
-                black.remove(tmp);
-        }
-
-        // moves piece, it it puts player into check it undoes the move\
-        board[y][x].movePiece(newX, newY);
+        // moves piece
         board[newY][newX] = board[y][x];
+        board[y][x].movePiece(newX, newY);
         board[y][x] = null;
 
+        // Board.updateAllLegalMoves(); // update moves of pieces to match new game state
         boolean isCheck = Board.isCheck(playerColor);
 
-        // undoes the move
-        board[newY][newX].movePiece(x, y);
+        // undoes the move by returning pieces to their original states and adds any
+        // captured piece back into the lists
         board[y][x] = board[newY][newX];
-        board[newY][newX] = tmp;
+        board[newY][newX].movePiece(x, y);
+        board[newY][newX] = otherPiece;
 
-        if (tmp != null) {
+        if (otherPiece != null) {
             if (playerColor)
-                white.add(tmp);
+                white.add(otherPiece);
             else
-                black.add(tmp);
+                black.add(otherPiece);
         }
 
+        // legal moves to previous state
+        Board.updateAllLegalMoves();
         return !isCheck; // if in check, can't move
     }
 
-    public static void movePiece(boolean playerColor, int x, int y, int newX, int newY) {
+    public static boolean movePiece(boolean playerColor, int x, int y, int newX, int newY) {
+        if (!board[y][x].isMoveLegal(new Move(newX, newY)))
+            return false;
+
         // removes piece from player's pieces if captured
         if (board[newY][newX] != null) {
             if (playerColor)
@@ -174,10 +173,11 @@ public class Board {
                 black.remove(board[newY][newX]);
         }
 
-        // moves piece, it it puts player into check it undoes the move
-        board[y][x].movePiece(newX, newY);
         board[newY][newX] = board[y][x];
+        board[newY][newX].movePiece(newX, newY);
         board[y][x] = null;
+
+        return true;
     }
 
     /** Parses userMove do stuff TODO finish comments */
@@ -202,19 +202,18 @@ public class Board {
         int newY = 8 - Character.getNumericValue(userMove.charAt(3));
 
         if (x == newX && y == newY) {
-            System.out.println("Illegal move: you did not move anywhere");
+            System.out.println("You did not move anywhere.");
             return false;
         }
         // verifies a piece is actually selected
         else if (piece == null) {
-            System.out.println("Illegal move: there is no piece at this location");
+            System.out.println("There is no piece at this location.");
             return false;
         } else if (piece.getColor() != playerColor) {
-            System.out.println("Illegal move: you have selected a piece of the other player");
+            System.out.println("You have selected a piece of the other player.");
             return false;
         } else {
-            if (piece.isMoveLegal(new Move(newX, newY))) {
-                Board.movePiece(playerColor, x, y, newX, newY);
+            if (Board.movePiece(playerColor, x, y, newX, newY)) {
                 Board.updateAllLegalMoves();
                 return true;
             } else {

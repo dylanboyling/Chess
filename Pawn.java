@@ -30,6 +30,10 @@ public class Pawn extends Piece {
         if (!validCoordinates(newX, newY))
             return false;
 
+        // 2) does the move put its king into check? if so cant move period
+        if (!Board.testMove(isBlack, x, y, newX, newY))
+            return false;
+
         // Checks piece your as it can only move in one direction
         if (isBlack) {
             // no moving backwards, too far, or left/right more than 1 square
@@ -38,7 +42,7 @@ public class Pawn extends Piece {
             }
             // checks movement if still in home row, can move two squares
             if (newY - y == 2 && y == 1 && x == newX) {
-                if (Board.getPiece(x, y + 1) == null && Board.getPiece(x, y + 2) == null) {
+                if ((Board.getPiece(x, y + 1) == null) && (Board.getPiece(x, y + 2) == null)) {
                     return true;
                 } else {
                     return false;
@@ -90,10 +94,6 @@ public class Pawn extends Piece {
                 }
             }
         }
-
-        // 2) does the move put its king into check? if so cant move period
-        if (!Board.testMove(isBlack, x, y, newX, newY))
-            return false;
 
         return false;
     }

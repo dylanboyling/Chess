@@ -51,7 +51,7 @@ public class PlayChess {
                 option = UserInput.inputOption();
                 switch (option) {
                     case LEGAL_MOVES:
-                        System.out.println(Board.getLegalMoves(playerTurn));
+                        System.out.println(Board.getLegalMoves(!playerTurn));
                         break;
                     case QUIT:
                         playerMoved = true; // exits game

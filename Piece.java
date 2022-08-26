@@ -55,13 +55,9 @@ public abstract class Piece {
     // Letter is uppercase if piece is black, lowercase if piece is white
     public abstract String getSymbol();
 
-    public boolean movePiece(int newX, int newY) {
-        if (validCoordinates(newX, newY)) {
-            this.x = newX;
-            this.y = newY;
-            return true;
-        }
-        return false;
+    public void movePiece(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
     }
 
     /**

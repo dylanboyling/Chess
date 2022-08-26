@@ -31,6 +31,7 @@ public class King extends Piece {
 
     @Override
     public boolean canMove(int newX, int newY) {
+        // 1) are coordinates in range
         if (!validCoordinates(newX, newY))
             return false;
 
@@ -38,13 +39,45 @@ public class King extends Piece {
         int xDir = newX - x;
         int yDir = y - newY;
 
-        // can only move 1 space in any direction
+        // 2) can only move 1 space in any direction
         if (Math.abs(xDir) > 1 || Math.abs(yDir) > 1 || xDir == 0 && yDir == 0)
+            return false;
+
+        // 3) does the move put its king into check? if so cant move period
+        if (!Board.testMove(isBlack, x, y, newX, newY))
             return false;
 
         return true;
     }
 
     @Override
-    public void updateLegalMoves() {}
+    public void updateLegalMoves() {
+        legalMoves.clear();
+
+        // upper left
+        if (canMove(x - 1, y - 1))
+            legalMoves.add(new Move(x - 1, y - 1));
+        // upper right
+        if (canMove(x + 1, y - 1))
+            legalMoves.add(new Move(x + 1, y - 1));
+        // bottom left
+        if (canMove(x - 1, y + 1))
+            legalMoves.add(new Move(x - 1, y + 1));
+        // bottom right
+        if (canMove(x + 1, y + 1))
+            legalMoves.add(new Move(x + 1, y + 1));
+
+        // above
+        if (canMove(x, y - 1))
+            legalMoves.add(new Move(x, y - 1));
+        // below
+        if (canMove(x, y + 1))
+            legalMoves.add(new Move(x, y + 1));
+        // right
+        if (canMove(x + 1, y))
+            legalMoves.add(new Move(x + 1, y));
+        // left
+        if (canMove(x - 1, y))
+            legalMoves.add(new Move(x - 1, y));
+    }
 }
