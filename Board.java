@@ -2,8 +2,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Represents a chess board and manages the chess pieces of each player, handles
- * output to console as well
+ * Represents a chess board. Manages the chess pieces of each player, processes
+ * the moves a user makes, outputs the board to the console, verifies if moves
+ * are valid, and keeps track of the win state.
  */
 
 public class Board {
@@ -15,15 +16,17 @@ public class Board {
     /** 2D array represnting the chess board and its pieces */
     private static Piece[][] board;
 
-    // Translating column input into integers
+    /** Used for translation user input into an integer representing the column */
     private static Map<String, Integer> cols = Map.of("a", 0, "b", 1,
             "c", 2, "d", 3, "e", 4, "f", 5,
             "g", 6, "h", 7);
 
+    /** you can't instantiate the Board, use static methods >:( */
     private Board() {
         /** no >:( */
     }
 
+    /** Goes through each player's pieces and updates the legal moves for each */
     public static void updateAllLegalMoves() {
         for (Piece p : black) {
             if (p != null)
@@ -35,14 +38,28 @@ public class Board {
         }
     }
 
+    /**
+     * Gets a piece at the coordinates (x,y)
+     * 
+     * @param x
+     * @param y
+     * @return
+     */
     public static Piece getPiece(int x, int y) {
         if (x >= 0 && y >= 0 && x <= 7 && y <= 7)
             return board[y][x];
         return null;
     }
 
-    /** */
+    /**
+     * Gets the instance of a player's king
+     * 
+     * @param isBlack Color of the player (true for black)
+     * @return instance of the player's king
+     */
     public static Piece getKing(boolean isBlack) {
+        // was using p instanceof king, but changed to compare the symbol while
+        // debugging. noticed this way later but it works! not gonna change it back
         if (isBlack) {
             for (Piece p : black) {
                 if (p.getSymbol().toLowerCase().equals("k")) {
@@ -60,16 +77,32 @@ public class Board {
         return null;
     }
 
-    /** Returns height/width of the board, assumes it is a square board */
+    /**
+     * Gets x dimension of the board, it is assumed that the baord is square
+     * 
+     * @return x dimension of the board
+     */
     public static int getDimension() {
         return board.length;
     }
 
-    /** Returns an instance of the list of pieces */
+    /**
+     * Gets an instance of the ArrayList containing the pieces of a given player
+     * 
+     * @param isBlack Color of the player (true for black)
+     * @return Instance of ArrayList containg pieces of player
+     */
     public static ArrayList<Piece> getPieces(boolean isBlack) {
         return isBlack ? black : white;
     }
 
+    /**
+     * Gets the legal moves of every piece of a given player and puts them all in
+     * one string
+     * 
+     * @param isBlack color of the player (black is true)
+     * @return string containing the legal moves of every piece
+     */
     public static String getLegalMoves(boolean isBlack) {
         String legalMoves = "";
 
@@ -90,10 +123,10 @@ public class Board {
     }
 
     /**
-     * Returns true if King will be in check if it moves to (testX, testY), false if
-     * not
+     * Checks if the player is currently in check
      * 
-     * @returns check status, true if king is in check and false if not
+     * @param playerColor Color of the player (true for black)
+     * @return true if player is in check, false otherwise
      */
     public static boolean isCheck(boolean playerColor) {
         King king = (King) getKing(playerColor);
@@ -102,34 +135,69 @@ public class Board {
         if (playerColor) {
             ArrayList<Piece> white = Board.getPieces(!playerColor);
             for (Piece p : white) {
-                if (p.isMoveLegal(new Move(king.getX(), king.getY())))
+                if (p.canMove(king.getX(), king.getY()))
                     return true;
 
             }
         } else {
             ArrayList<Piece> black = Board.getPieces(!playerColor);
             for (Piece p : black) {
-                if (p.isMoveLegal(new Move(king.getX(), king.getY())))
+                if (p.canMove(king.getX(), king.getY()))
                     return true;
             }
         }
 
         return false;
-
     }
 
+    /**
+     * Checks a player's pieces to see if they have any legal moves to make
+     * 
+     * @param playerColor color of the player (true for black)
+     * @return true if player has at least one legal move they can make, false
+     *         otherwise
+     */
+    public static boolean hasLegalMoves(boolean playerColor) {
+        if (playerColor) {
+            ArrayList<Piece> black = Board.getPieces(playerColor);
+            for (Piece p : black) {
+                if (p.hasLegalMoves())
+                    return true;
+            }
+        } else {
+            ArrayList<Piece> white = Board.getPieces(playerColor);
+            for (Piece p : white) {
+                if (p.hasLegalMoves())
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Tests moving piece at (x,y) to (newX, newY) by verifying if the move is valid
+     * and if the move will put @playerColor in check.
+     * 
+     * @param playerColor Color of the player (true for black)
+     * @param x           X coordinate of piece to be moved
+     * @param y           Y coordinate of piece to be moved
+     * @param newX        X coordinate of destination
+     * @param newY        Y coordinate of destination
+     * @return true if move is legal, false if it is illegal
+     */
     public static boolean testMove(boolean playerColor, int x, int y, int newX, int newY) {
-        // coordinates in range
+        // coordinates are in range
         if (newX < 0 || newY < 0 || newX > 7 || newY > 7)
+            return false;
+
+        // can the piece actually move there?
+        if (!board[y][x].canMove(newX, newY))
             return false;
 
         Piece otherPiece = board[newY][newX];
 
-        // cant capture your own piece
-        if (otherPiece != null && otherPiece.getColor() == playerColor)
-            return false;
-
-        // remove captured piece
+        // removed captured piece
         if (playerColor)
             white.remove(otherPiece);
         else
@@ -140,7 +208,7 @@ public class Board {
         board[y][x].movePiece(newX, newY);
         board[y][x] = null;
 
-        // Board.updateAllLegalMoves(); // update moves of pieces to match new game state
+        // if the move results in check for the player, false will be returned
         boolean isCheck = Board.isCheck(playerColor);
 
         // undoes the move by returning pieces to their original states and adds any
@@ -156,13 +224,23 @@ public class Board {
                 black.add(otherPiece);
         }
 
-        // legal moves to previous state
-        Board.updateAllLegalMoves();
         return !isCheck; // if in check, can't move
     }
 
+    /**
+     * Moves piece at (x,y) to (newX, newY) by verifying if the move is valid, if it
+     * is the piece will be moved and it's previous spot will be emptied
+     * 
+     * @param playerColor Color of the player (true for black)
+     * @param x           X coordinate of piece to be moved
+     * @param y           Y coordinate of piece to be moved
+     * @param newX        X coordinate of destination
+     * @param newY        Y coordinate of destination
+     * @return true if move is legal, false if it is illegal
+     */
     public static boolean movePiece(boolean playerColor, int x, int y, int newX, int newY) {
-        if (!board[y][x].isMoveLegal(new Move(newX, newY)))
+        // can this piece actually move to the coordinates?
+        if (!Board.testMove(playerColor, x, y, newX, newY))
             return false;
 
         // removes piece from player's pieces if captured
@@ -173,14 +251,26 @@ public class Board {
                 black.remove(board[newY][newX]);
         }
 
-        board[newY][newX] = board[y][x];
-        board[newY][newX].movePiece(newX, newY);
+        Piece piece = Board.getPiece(x, y);
+        // moves the piece
+        board[newY][newX] = piece;
+        piece.movePiece(newX, newY);
         board[y][x] = null;
 
         return true;
     }
 
-    /** Parses userMove do stuff TODO finish comments */
+    /**
+     * Parses the move entered by the user to get the piece they selected and where
+     * they wish to move it to.
+     * 
+     * @param userMove    String containing the coordinates of the piece being moved
+     *                    and the destination coordinates in the form
+     *                    [col][row][destCol][destRow]
+     * @param playerColor Color of the player making the move (true if black)
+     * @return true if the move is legal (piece is moved), false if move is illegal
+     *         or invald format (board remains unchanged)
+     */
     public static boolean processMove(String userMove, boolean playerColor) {
 
         // Verifies move entered by user are valid coordinates
@@ -223,14 +313,14 @@ public class Board {
         }
     }
 
-    // Draws the chess board in the console with piece locations
+    /** Prints a chess board in the console with the locations of each piece */
     public static void draw() {
 
         // Column + row labeling variables
         String[] cols = { "a", "b", "c", "d", "e", "f", "g", "h" };
         int row = 8;
 
-        // Column labeling from a to f
+        // Top column labeling from a to f
         System.out.print("  ");
         for (String col : cols) {
             System.out.print("  " + col + " ");
@@ -244,21 +334,21 @@ public class Board {
 
             // Prints piece symbol if there is a piece, otherwise it is left blank
             // Also prints x labeling from 8 to 1
-            System.out.print(row-- + " ");
+            System.out.print(row + " ");
             for (int x = 0; x < board[y].length; x++) {
                 if (board[y][x] != null)
                     System.out.print("| " + board[y][x].getSymbol() + " ");
                 else
                     System.out.print("|   ");
             }
-            System.out.print("|\n");
+            System.out.print("| " + row-- + "\n");
         }
 
         // bottom border of grid
         System.out.print("  ");
         System.out.print("+---".repeat(board.length) + "+\n");
 
-        // Column labeling from a to f
+        // bottom labeling from a to f
         System.out.print("  ");
         for (String col : cols) {
             System.out.print("  " + col + " ");
@@ -266,7 +356,10 @@ public class Board {
         System.out.println();
     }
 
-    /** Initializes a new board and populates it with fresh pieces */
+    /**
+     * Initializes a new board and populates it with fresh pieces. Also checks all
+     * the legal moves a piece may make.
+     */
     public static void newGame() {
 
         // 2D array to hold chess pieces
@@ -309,5 +402,7 @@ public class Board {
             if (p != null)
                 white.add(p);
         }
+
+        Board.updateAllLegalMoves();
     }
 }

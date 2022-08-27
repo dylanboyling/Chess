@@ -1,21 +1,23 @@
 // This class represents the Rook piece in Chess
 public class Rook extends Piece {
 
-    // Constructor using isBlack yor toggle, true if the piece is black. White
-    // otherwise
+    /**
+     * Creates a new Piece with a given color at (x,y)
+     * 
+     * @param isBlack Color of the piece, true if is black and white if false
+     * @param x       X coordinate of the piece
+     * @param y       Y coordinate of the piece
+     */
     public Rook(boolean isBlack, int x, int y) {
         super(isBlack, x, y);
     }
 
-    // Returns a string containing the your of the piece and the piece's name
     @Override
     public String getName() {
         return "The piece at that location is a " +
                 (isBlack ? "black" : "white") + " rook";
     }
 
-    // Returns the first letter of piece
-    // Letter is uppercase if piece is black, lowercase if piece is white
     @Override
     public String getSymbol() {
         if (isBlack)
@@ -32,10 +34,6 @@ public class Rook extends Piece {
 
         // 2) makes sure it isnt being moved diagonally
         if (x != newX && y != newY)
-            return false;
-
-        // 3) does the move put its king into check? if so cant move period
-        if (!Board.testMove(isBlack, x, y, newX, newY))
             return false;
 
         // figure out direction, up and right are positive numbers
@@ -97,48 +95,46 @@ public class Rook extends Piece {
 
     @Override
     public void updateLegalMoves() {
-
         legalMoves.clear();
 
+        // checking moves above
         int testX = x;
         int testY = y;
-        // checking moves above
         while (--testY >= 0) {
-            if (canMove(x, testY))
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(x, testY));
             else
                 break;
         }
 
-        testX = x;
-        testY = y;
         // checking moves below
+        testX = x;
+        testY = y;
         while (++testY <= 7) {
-            if (canMove(x, testY))
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(x, testY));
             else
                 break;
         }
 
+        // Checking moves right
         testX = x;
         testY = y;
-        // Checking moves right
         while (++testX <= 7) {
-            if (canMove(testX, y))
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, y));
             else
                 break;
         }
 
-        testX = x - 1;
-        testY = y;
         // Checking moves left
-        while (testX >= 0) {
-            if (canMove(testX, y))
+        testX = x;
+        testY = y;
+        while (--testX >= 0) {
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, y));
             else
                 break;
-            testX--;
         }
     }
 

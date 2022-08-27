@@ -1,4 +1,4 @@
-// This class represents the Queen piece in Chess
+/** This class represents the Queen piece in Chess */
 public class Bishop extends Piece {
 
     // Constructor using isBlack yor toggle, true if the piece is black. White
@@ -24,6 +24,10 @@ public class Bishop extends Piece {
             return "b";
     }
 
+    /**
+     * Verifies if a piece can successful move to a space (i.e. no other pieces are
+     * in its path and moves how it should)
+     */
     @Override
     public boolean canMove(int newX, int newY) {
         // 1) are coordinates in range
@@ -38,9 +42,9 @@ public class Bishop extends Piece {
         if (x == newX || y == newY || Math.abs(xDir) != Math.abs(yDir))
             return false;
 
-        // 3) does the move put its king into check? if so cant move period
-        if (!Board.testMove(isBlack, x, y, newX, newY))
-            return false;
+        // // 3) does the move put its king into check? if so cant move period
+        // if (!Board.testMove(isBlack, x, y, newX, newY))
+        // return false;
 
         // top right diagonal
         if (xDir > 0 && yDir > 0) {
@@ -105,55 +109,43 @@ public class Bishop extends Piece {
         legalMoves.clear();
 
         // top right
-        int testX = x + 1;
-        int testY = y - 1;
-
-        while (testX <= 7 || testY >= 0) {
-            if (canMove(testX, testY))
+        int testX = x;
+        int testY = y;
+        while (++testX <= 7 || --testY >= 0) {
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
             else
                 break;
-            testX++;
-            testY--;
         }
 
         // top left
-        testX = x - 1;
-        testY = y - 1;
-
-        while (testX >= 0 || testY >= 0) {
-            if (canMove(testX, testY))
+        testX = x;
+        testY = y;
+        while (--testX >= 0 || --testY >= 0) {
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
             else
                 break;
-            testX--;
-            testY--;
         }
 
         // bottom right
-        testX = x + 1;
-        testY = y + 1;
-
-        while (testX <= 7 || testY <= 7) {
-            if (canMove(testX, testY))
+        testX = x;
+        testY = y;
+        while (++testX <= 7 || ++testY <= 7) {
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
             else
                 break;
-            testX++;
-            testY++;
         }
 
         // bottom left
         testX = x - 1;
         testY = y + 1;
-
-        while (testX >= 0 || testY <= 7) {
-            if (canMove(testX, testY))
+        while (--testX >= 0 || ++testY <= 7) {
+            if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
             else
                 break;
-            testX--;
-            testY++;
         }
     }
 }

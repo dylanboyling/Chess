@@ -1,32 +1,29 @@
-// This class represents the King piece in Chess
+/** This class represents the King piece in Chess */
 public class King extends Piece {
 
-    // Constructor using isBlack yor toggle, true if the piece is black. White
-    // otherwise
+    /**
+     * Creates a new Piece with a given color at (x,y)
+     * 
+     * @param isBlack Color of the piece, true if is black and white if false
+     * @param x       X coordinate of the piece
+     * @param y       Y coordinate of the piece
+     */
     public King(boolean isBlack, int x, int y) {
         super(isBlack, x, y);
     }
 
-    // Returns a string containing the your of the piece and the piece's name
     @Override
     public String getName() {
         return "The piece at that location is a " +
                 (isBlack ? "black" : "white") + " king";
     }
 
-    // Returns the first letter of piece
-    // Letter is uppercase if piece is black, lowercase if piece is white
     @Override
     public String getSymbol() {
         if (isBlack)
             return "K";
         else
             return "k";
-    }
-
-    public boolean isCheckmate() {
-
-        return false;
     }
 
     @Override
@@ -43,10 +40,6 @@ public class King extends Piece {
         if (Math.abs(xDir) > 1 || Math.abs(yDir) > 1 || xDir == 0 && yDir == 0)
             return false;
 
-        // 3) does the move put its king into check? if so cant move period
-        if (!Board.testMove(isBlack, x, y, newX, newY))
-            return false;
-
         return true;
     }
 
@@ -55,29 +48,29 @@ public class King extends Piece {
         legalMoves.clear();
 
         // upper left
-        if (canMove(x - 1, y - 1))
+        if (Board.testMove(isBlack, x, y, x - 1, y - 1))
             legalMoves.add(new Move(x - 1, y - 1));
         // upper right
-        if (canMove(x + 1, y - 1))
+        if (Board.testMove(isBlack, x, y, x + 1, y - 1))
             legalMoves.add(new Move(x + 1, y - 1));
         // bottom left
-        if (canMove(x - 1, y + 1))
+        if (Board.testMove(isBlack, x, y, x - 1, y + 1))
             legalMoves.add(new Move(x - 1, y + 1));
         // bottom right
-        if (canMove(x + 1, y + 1))
+        if (Board.testMove(isBlack, x, y, x + 1, y + 1))
             legalMoves.add(new Move(x + 1, y + 1));
 
         // above
-        if (canMove(x, y - 1))
+        if (Board.testMove(isBlack, x, y, x, y - 1))
             legalMoves.add(new Move(x, y - 1));
         // below
-        if (canMove(x, y + 1))
+        if (Board.testMove(isBlack, x, y, x, y + 1))
             legalMoves.add(new Move(x, y + 1));
         // right
-        if (canMove(x + 1, y))
+        if (Board.testMove(isBlack, x, y, x + 1, y))
             legalMoves.add(new Move(x + 1, y));
         // left
-        if (canMove(x - 1, y))
+        if (Board.testMove(isBlack, x, y, x - 1, y))
             legalMoves.add(new Move(x - 1, y));
     }
 }
