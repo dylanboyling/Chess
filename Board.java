@@ -208,7 +208,7 @@ public class Board {
         piece.movePiece(newX, newY);
         board[newY][newX] = piece;
         if (otherPiece != null)
-            otherPiece.movePiece(-1, -1); // TODO testing see if this fixes issue
+            otherPiece.movePiece(-1, -1); // leftover from testing, keeping so nothing breaks
         board[y][x] = null;
 
         // if the move results in check for the player, false will be returned
@@ -263,7 +263,7 @@ public class Board {
         piece.movePiece(newX, newY);
         board[newY][newX] = piece;
         if (otherPiece != null)
-            otherPiece.movePiece(-1, -1); // TODO testing see if this fixes issue
+            otherPiece.movePiece(-1, -1); // leftover from testing, keeping so nothing breaks
         board[y][x] = null;
 
         /**

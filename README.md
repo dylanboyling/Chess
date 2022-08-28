@@ -2,6 +2,8 @@
 
 This is a command line interface chess game coded in Java. It's adapted from a minimally viable chess program I created for a lab assignment at Algonquin College. I created this using Java with the intention of furthering my understanding of OOP principles such as inheritance and polymorphism.
 
+Currently, a basic game of chess can be played with move and capture functionality for all pieces as well as checkmate and stalemate detection. En passant and castling are not implemented but I may add them in the future if time permits it.
+
 Currently, a basic game of chess can be played with move, capture, and pawn promotion functionality for all pieces as well as checkmate and stalemate detection. En passant and castling are not implemented but I may add them in the future if time permits it.
 
 ## Installation
