@@ -2,9 +2,7 @@
 
 This is a command line interface chess game coded in Java. It's adapted from a minimally viable chess program I created for a lab assignment at Algonquin College. I created this using Java with the intention of furthering my understanding of OOP principles such as inheritance and polymorphism.
 
-Currently, a basic game of chess can be played with move and capture functionality for all pieces as well as checkmate and stalemate detection. En passant and castling are not implemented but I may add them in the future if time permits it.
-
-Currently, a basic game of chess can be played with move, capture, and pawn promotion functionality for all pieces as well as checkmate and stalemate detection. En passant and castling are not implemented but I may add them in the future if time permits it.
+Currently, a game of chess can be played with move, capture, and pawn promotion functionality for all pieces as well as player scores, checkmate, stalemate detection. En passant and castling are not implemented but I may add them in the future if time permits it.
 
 ## Installation
 
@@ -21,7 +19,7 @@ At the moment, it is played between two human players one of whom will be random
 
 e.g. 'a2 a4' to move the piece located at a2 to a4
 
-Enter ? to display all legal moves you may make (WIP) and Q to quit. The game will end when checkmate is detected (player is in check and no moves can be made) or there is a stalemate (player is not in check and no moves can be made). When the game ends the player will be prompted if they'd like to play another game and each player's scores will be updated accordingly.
+Enter ? to display all legal moves you may make and Q to quit. The game will end when checkmate is detected (player is in check and no moves can be made) or there is a stalemate (player is not in check and no moves can be made). When the game ends, the player will be prompted if they'd like to play another game and each player's scores will be updated accordingly.
 
 ## Screenshots
 
