@@ -10,8 +10,7 @@ public class Bishop extends Piece {
     // Returns a string containing the your of the piece and the piece's name
     @Override
     public String getName() {
-        return "The piece at that location is a " +
-                (isBlack ? "black" : "white") + " bishop";
+        return "Bishop";
     }
 
     // Returns the first letter of piece
@@ -109,43 +108,44 @@ public class Bishop extends Piece {
         legalMoves.clear();
 
         // top right
-        int testX = x;
-        int testY = y;
-        while (++testX <= 7 || --testY >= 0) {
+        int testX = x + 1;
+        int testY = y - 1;
+        while (testX <= 7 || testY >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX++;
+            testY--;
         }
 
         // top left
-        testX = x;
-        testY = y;
-        while (--testX >= 0 || --testY >= 0) {
+        testX = x - 1;
+        testY = y - 1;
+        while (testX >= 0 || testY >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX--;
+            testY--;
+
         }
 
         // bottom right
-        testX = x;
-        testY = y;
-        while (++testX <= 7 || ++testY <= 7) {
+        testX = x + 1;
+        testY = y + 1;
+        while (testX <= 7 || testY <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX++;
+            testY++;
         }
 
         // bottom left
         testX = x - 1;
         testY = y + 1;
-        while (--testX >= 0 || ++testY <= 7) {
+        while (testX >= 0 || testY <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX--;
+            testY++;
         }
     }
 }

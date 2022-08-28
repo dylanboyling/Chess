@@ -191,7 +191,7 @@ public class Board {
         if (newX < 0 || newY < 0 || newX > 7 || newY > 7)
             return false;
 
-        // can the piece actually move there?
+        // non null piece, can it actually move there?
         if (!board[y][x].canMove(newX, newY))
             return false;
 
@@ -203,9 +203,12 @@ public class Board {
         else
             black.remove(otherPiece);
 
-        // moves piece
-        board[newY][newX] = board[y][x];
-        board[y][x].movePiece(newX, newY);
+        // moves the piece
+        Piece piece = Board.getPiece(x, y);
+        piece.movePiece(newX, newY);
+        board[newY][newX] = piece;
+        if (otherPiece != null)
+            otherPiece.movePiece(-1, -1); // TODO testing see if this fixes issue
         board[y][x] = null;
 
         // if the move results in check for the player, false will be returned
@@ -213,8 +216,10 @@ public class Board {
 
         // undoes the move by returning pieces to their original states and adds any
         // captured piece back into the lists
-        board[y][x] = board[newY][newX];
-        board[newY][newX].movePiece(x, y);
+        piece.movePiece(x, y);
+        board[y][x] = piece;
+        if (otherPiece != null)
+            otherPiece.movePiece(newX, newY);
         board[newY][newX] = otherPiece;
 
         if (otherPiece != null) {
@@ -243,21 +248,56 @@ public class Board {
         if (!Board.testMove(playerColor, x, y, newX, newY))
             return false;
 
+        Piece otherPiece = board[newY][newX];
+
         // removes piece from player's pieces if captured
-        if (board[newY][newX] != null) {
+        if (otherPiece != null) {
             if (playerColor)
-                white.remove(board[newY][newX]);
+                white.remove(otherPiece);
             else
-                black.remove(board[newY][newX]);
+                black.remove(otherPiece);
         }
 
-        Piece piece = Board.getPiece(x, y);
         // moves the piece
-        board[newY][newX] = piece;
+        Piece piece = Board.getPiece(x, y);
         piece.movePiece(newX, newY);
+        board[newY][newX] = piece;
+        if (otherPiece != null)
+            otherPiece.movePiece(-1, -1); // TODO testing see if this fixes issue
         board[y][x] = null;
 
+        /**
+         * checks if pawn and can be promoted. maybe this is kind of sloppy sticking it
+         * here but I'm adding this at the end of "finishing" this chess game. if it
+         * works im happy :)
+         */
+        if (piece instanceof Pawn && ((Pawn) piece).canBePromoted()) {
+            int userOption = UserInput.promotePawn();
+            Piece promotedPiece;
+
+            if (userOption == Promotion.QUEEN.getValue()) {
+                promotedPiece = new Queen(playerColor, newY, newX);
+            } else if (userOption == Promotion.ROOK.getValue())
+                promotedPiece = new Rook(playerColor, newY, newX);
+            else if (userOption == Promotion.BISHOP.getValue())
+                promotedPiece = new Bishop(playerColor, newY, newX);
+            else // KNIGHT, else because promotedPiece cant be set if isnt initialized
+                promotedPiece = new Knight(playerColor, newY, newX);
+
+            board[newY][newX] = promotedPiece;
+            System.out.printf("Your piece at has been promoted to a %s", promotedPiece.getName());
+
+            if (playerColor) {
+                black.add(promotedPiece);
+                black.remove(Board.getPiece(newX, newY));
+            } else {
+                white.add(promotedPiece);
+                white.remove(Board.getPiece(newX, newY));
+            }
+        }
+
         return true;
+
     }
 
     /**
@@ -404,5 +444,23 @@ public class Board {
         }
 
         Board.updateAllLegalMoves();
+    }
+
+    /** Values for selecting a piece when promotion */
+    public enum Promotion {
+        QUEEN(1),
+        ROOK(2),
+        BISHOP(3),
+        KNIGHT(4);
+
+        private int value;
+
+        private Promotion(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 }

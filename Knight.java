@@ -14,8 +14,7 @@ public class Knight extends Piece {
 
     @Override
     public String getName() {
-        return "The piece at that location is a " +
-                (isBlack ? "black" : "white") + " knight";
+        return "Knight";
     }
 
     @Override

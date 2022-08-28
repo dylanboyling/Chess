@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Map;
 
-// This is an abstract class Piece that will be used as a template
-// for the various chess pieces to inherit and implement.
+/**
+ * This is an abstract class Piece that will be used as a template for the
+ * various chess pieces to inherit and implement.
+ */
 public abstract class Piece {
 
     /** Color toggle, true if piece is black and false if white */

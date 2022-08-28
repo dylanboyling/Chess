@@ -1,8 +1,5 @@
-// This class represents the Pawn piece in Chess
+/** This class represents the Pawn piece in Chess */
 public class Pawn extends Piece {
-
-    // TODO pawn promotion ??
-    // private boolean hasPromoted = false;
 
     /**
      * Creates a new Piece with a given color at (x,y)
@@ -17,13 +14,32 @@ public class Pawn extends Piece {
 
     @Override
     public String getName() {
-        return "The piece at that location is a " +
-                (isBlack ? "black" : "white") + " pawn";
+        return "Pawn";
     }
 
     @Override
     public String getSymbol() {
         return (isBlack) ? "P" : "p";
+    }
+
+    /**
+     * Checks if can be promoted
+     * 
+     * @return true if pawn can be promoted, false otherwise
+     */
+    public boolean canBePromoted() {
+        // If pawn is at end of board, it can promote
+        if (isBlack) {
+            if (getY() == 7) {
+                return true;
+            }
+        } else {
+            if (getY() == 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -125,6 +141,5 @@ public class Pawn extends Piece {
             if (Board.testMove(isBlack, x, y, x - 1, y - 1))
                 legalMoves.add(new Move(x - 1, y - 1));
         }
-
     }
 }

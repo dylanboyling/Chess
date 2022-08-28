@@ -1,9 +1,7 @@
 import java.util.Scanner;
 
 /**
- * This class is for interfacing with the user. Note: only really gets a string
- * at the moment, it used to do a little more but I changed how coordinates were
- * entered
+ * This class is for interfacing with the user.
  */
 public class UserInput {
 
@@ -31,13 +29,34 @@ public class UserInput {
         do {
             System.out.print("Would you like to play another game (Y/N)? ");
             input = keyboard.nextLine().toLowerCase();
-            if (input == "y")
+            if (input.equals("y"))
                 return true;
-            else if (input == "n")
+            else if (input.equals("n"))
                 return false;
             else
                 System.out.print("%nPlease enter y or n: ");
         } while (true);
+    }
+
+    /**
+     * Asks the user which piece they would like to promote a pawn to
+     * 
+     * @return int corresponding to piece selection using the enum Pawn.Promotion
+     */
+    public static int promotePawn() {
+        int userOption = 0;
+        System.out.printf("Your pawn can be promoted! What would you like to promote it to?%n"
+                + "1) QUEEN%n2) ROOK%n3) BISHOP%n4) KNIGHT%n");
+
+        while (userOption < 1 || userOption > 4) {
+            if (keyboard.hasNextInt()) {
+                userOption = keyboard.nextInt();
+            } else {
+                System.out.print("Please enter a number between 1 and 4: ");
+            }
+        }
+
+        return userOption;
     }
 
     /** Closes UserInput's resources */

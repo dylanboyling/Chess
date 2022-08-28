@@ -1,15 +1,14 @@
 import java.util.Random;
 
-/*
+/**
  * Author: Dylan Boyling  
  * Description: This program is adapted from my own minimally viable chess game that I coded for an 
  * assignment. It displays a chess board in the console using text and provides options for the user 
  * to move a piece, view the moves a piece may make, or to quit the program.
  * Only move functionality for rook and pawn is implemented at the moment. 
  * Chess pieces are represented in a grid by the first letter of the piece name. The letter is uppercase if it is black, lowercase if it is white.
- * Move functionality for pieces is not finished, nor is check, checkmate, or stalement.
  * En passant and castling I will do if I have time : )
- * Would maybe like to make a GUI down the road and implement a basic AI.
+ * Would maybe like to make a GUI down the road and implement a basic AI with minimaxing.
  */
 
 /** This class launches the game of chess and handles users input */
@@ -24,7 +23,8 @@ public class PlayChess {
 
         Random coinFlip = new Random(); // random player goes first
         boolean playerTurn = coinFlip.nextBoolean(); // white for false, black for true
-        boolean playerMoved;
+        boolean hasPlayerMoved = false;
+        boolean isGameOver = false;
 
         System.out.printf("%nWelcome to my command line interpretation of chess!%n"
                 + "White chess pieces are indicated in lower case, black pieces in upper case.%n"
@@ -45,54 +45,53 @@ public class PlayChess {
         do {
             Board.draw();
             System.out.println((playerTurn ? "It is black's turn" : "It is white's turn"));
-            playerMoved = false;
-            boolean gameOver = false;
 
             // Menu selection, only exits when player enters a valid move or game over
             do {
+                hasPlayerMoved = false;
                 // if player does not have any moves to move it is either checkmate or stalemate
                 if (!Board.hasLegalMoves(playerTurn)) {
                     if (Board.isCheck(playerTurn)) {
-                        System.out.println((playerTurn ? "Black is in checkmate! Game over"
-                                : "White is in checkmate! Game over") + "\nWould you like to play again?");
+                        System.out.println((playerTurn ? "\nBlack is in checkmate! Game over."
+                                : "\nWhite is in checkmate! Game over.") + "\nWould you like to play again?");
                         if (playerTurn) {
                             whiteScore++;
                         } else {
                             blackScore++;
                         }
-                    } else {
-                        System.out.println("You cannot make any moves, the game is a stalemate."
-                                + "\nWould you like to play again?");
-                    }
-                    System.out.printf("Black player's score: %d%nWhite player's score: %d", blackScore, whiteScore);
-                    gameOver = true;
-                }
-                // if user is not in check, they can move
-                else {
+                    } else
+                        System.out.println("You cannot make any moves, the game is a stalemate.");
+
+                    System.out.printf("%nBlack player's score: %d%nWhite player's score: %d%n",
+                            blackScore, whiteScore);
+                    isGameOver = true;
+                } else { // if user is not in check, they can move
                     option = UserInput.inputOption();
 
                     switch (option) {
                         case LEGAL_MOVES:
-                            System.out.println(playerTurn + " moves : " + Board.getLegalMoves(playerTurn));
-                            System.out.println(!playerTurn + " moves : " + Board.getLegalMoves(!playerTurn));
+                            System.out.println("Legal moves : " + Board.getLegalMoves(playerTurn));
                             break;
                         case QUIT:
-                            playerMoved = true; // exits game
+                            hasPlayerMoved = true; // exits game
                             break;
                         default:
-                            playerMoved = Board.processMove(option, playerTurn);
+                            hasPlayerMoved = Board.processMove(option, playerTurn);
                     }
-                }
-            } while (!playerMoved || gameOver);
 
-            if (gameOver) {
+                }
+
+            } while (!hasPlayerMoved && !isGameOver);
+
+            if (isGameOver) {
                 if (UserInput.playAgain()) {
-                    Board.newGame();
+                    isGameOver = false;
                     playerTurn = coinFlip.nextBoolean();
+                    Board.newGame();
                 } else
                     option = QUIT;
             } else
-                playerTurn = !playerTurn; // alternate players
+                playerTurn = !playerTurn;// alternate players
         } while (!option.equalsIgnoreCase(QUIT));
 
         UserInput.closeInput();

@@ -1,4 +1,4 @@
-// This class represents the Rook piece in Chess
+/** This class represents the Rook piece in Chess */
 public class Rook extends Piece {
 
     /**
@@ -14,8 +14,7 @@ public class Rook extends Piece {
 
     @Override
     public String getName() {
-        return "The piece at that location is a " +
-                (isBlack ? "black" : "white") + " rook";
+        return "Rook";
     }
 
     @Override
@@ -103,8 +102,6 @@ public class Rook extends Piece {
         while (--testY >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(x, testY));
-            else
-                break;
         }
 
         // checking moves below
@@ -113,8 +110,6 @@ public class Rook extends Piece {
         while (++testY <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(x, testY));
-            else
-                break;
         }
 
         // Checking moves right
@@ -123,8 +118,6 @@ public class Rook extends Piece {
         while (++testX <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, y));
-            else
-                break;
         }
 
         // Checking moves left
@@ -133,8 +126,6 @@ public class Rook extends Piece {
         while (--testX >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, y));
-            else
-                break;
         }
     }
 

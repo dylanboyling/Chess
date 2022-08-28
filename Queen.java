@@ -1,4 +1,4 @@
-// This class represents the Queen piece in Chess
+/** This class represents the Queen piece in Chess */
 public class Queen extends Piece {
 
     /**
@@ -14,8 +14,7 @@ public class Queen extends Piece {
 
     @Override
     public String getName() {
-        return "The piece at that location is a " +
-                (isBlack ? "black" : "white") + " queen";
+        return "Queen";
     }
 
     @Override
@@ -157,8 +156,6 @@ public class Queen extends Piece {
         while (--testY >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(x, testY));
-            else
-                break;
         }
 
         // checking moves below
@@ -167,8 +164,6 @@ public class Queen extends Piece {
         while (++testY <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(x, testY));
-            else
-                break;
         }
 
         // Checking moves right
@@ -177,8 +172,6 @@ public class Queen extends Piece {
         while (++testX <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, y));
-            else
-                break;
         }
 
         // Checking moves left
@@ -187,49 +180,47 @@ public class Queen extends Piece {
         while (--testX >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, y));
-            else
-                break;
         }
 
         // top right
-        testX = x;
-        testY = y;
-        while (++testX <= 7 || --testY >= 0) {
+        testX = x + 1;
+        testY = y - 1;
+        while (testX <= 7 || testY >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX++;
+            testY--;
         }
 
         // top left
-        testX = x;
-        testY = y;
-        while (--testX >= 0 || --testY >= 0) {
+        testX = x - 1;
+        testY = y - 1;
+        while (testX >= 0 || testY >= 0) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX--;
+            testY--;
+
         }
 
         // bottom right
-        testX = x;
-        testY = y;
-        while (++testX <= 7 || ++testY <= 7) {
+        testX = x + 1;
+        testY = y + 1;
+        while (testX <= 7 || testY <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
-
+            testX++;
+            testY++;
         }
 
         // bottom left
-        testX = x;
-        testY = y;
-        while (--testX >= 0 || ++testY <= 7) {
+        testX = x - 1;
+        testY = y + 1;
+        while (testX >= 0 || testY <= 7) {
             if (Board.testMove(isBlack, x, y, testX, testY))
                 legalMoves.add(new Move(testX, testY));
-            else
-                break;
+            testX--;
+            testY++;
         }
     }
 }
