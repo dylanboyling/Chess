@@ -35,4 +35,4 @@ Enter ? to display all legal moves you may make and Q to quit. The game will end
 
 ## License 
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE.md` for more information.
